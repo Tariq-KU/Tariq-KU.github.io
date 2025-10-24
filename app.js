@@ -236,21 +236,47 @@ function populateDefaultBoard() {
 
 function setupPeer() {
   return new Promise((resolve, reject) => {
-    const peerInstance = new Peer();
     const peerInstance = new Peer({
+      host: '0.peerjs.com',       // official signaling server
+      port: 443,
+      path: '/',
+      secure: true,
       config: {
-        iceServers: ICE_SERVERS,
+        iceServers: [
+          { urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] },
+          {
+            urls: 'turn:openrelay.metered.ca:80',
+            username: 'openrelayproject',
+            credential: 'openrelayproject',
+          },
+          {
+            urls: 'turn:openrelay.metered.ca:443',
+            username: 'openrelayproject',
+            credential: 'openrelayproject',
+          },
+          {
+            urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+            username: 'openrelayproject',
+            credential: 'openrelayproject',
+          },
+        ],
       },
-      debug: 1,
+      debug: 2, // optional; shows helpful logs in console
     });
-    peerInstance.on('open', (id) => resolve(peerInstance));
+
+    peerInstance.on('open', (id) => {
+      console.log('✅ PeerJS connected with ID:', id);
+      resolve(peerInstance);
+    });
+
     peerInstance.on('error', (err) => {
-      console.error(err);
-      alert('Something went wrong with the connection. Try refreshing the page.');
+      console.error('❌ PeerJS error:', err);
+      alert('Could not establish peer connection. Please try again or refresh the page.');
       reject(err);
     });
   });
 }
+
 function initializeHost() {
   isHost = true;
   localName = hostNameInput.value.trim() || 'Host';
@@ -418,3 +444,4 @@ document.addEventListener('DOMContentLoaded', () => {
   resetState();
   populateDefaultBoard();
 });
+
