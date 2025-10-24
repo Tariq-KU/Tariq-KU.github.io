@@ -237,7 +237,7 @@ function populateDefaultBoard() {
 function setupPeer() {
   return new Promise((resolve, reject) => {
     const peerInstance = new Peer({
-      host: '0.peerjs.com',       // official signaling server
+      host: '0.peerjs.com',  // official PeerJS cloud signaling server
       port: 443,
       path: '/',
       secure: true,
@@ -261,7 +261,7 @@ function setupPeer() {
           },
         ],
       },
-      debug: 2, // optional; shows helpful logs in console
+      debug: 2,
     });
 
     peerInstance.on('open', (id) => {
@@ -276,6 +276,7 @@ function setupPeer() {
     });
   });
 }
+
 
 function initializeHost() {
   isHost = true;
@@ -444,4 +445,5 @@ document.addEventListener('DOMContentLoaded', () => {
   resetState();
   populateDefaultBoard();
 });
+
 
