@@ -253,15 +253,23 @@ function populateDefaultBoard() {
 
 function setupPeer() {
   return new Promise((resolve, reject) => {
-    const peerInstance = new Peer();
+    const peerInstance = new Peer({
+      host: 'peerjs-server.herokuapp.com',
+      port: 443,
+      path: '/',
+      secure: true,
+    });
+
     peerInstance.on('open', (id) => resolve(peerInstance));
+
     peerInstance.on('error', (err) => {
-      console.error(err);
-      alert('Something went wrong with the connection. Try refreshing the page.');
+      console.error('PeerJS error:', err);
+      alert('Could not establish peer connection. Please try again or refresh the page.');
       reject(err);
     });
   });
 }
+
 
 function initializeHost() {
   isHost = true;
@@ -456,3 +464,4 @@ document.addEventListener('DOMContentLoaded', () => {
   resetState();
   populateDefaultBoard();
 });
+
