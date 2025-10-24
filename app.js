@@ -254,22 +254,26 @@ function populateDefaultBoard() {
 function setupPeer() {
   return new Promise((resolve, reject) => {
     const peerInstance = new Peer({
-      host: '0.peerjs.com',
+      host: '0.peerjs.com',   // Official stable PeerJS cloud server
       port: 443,
       path: '/',
       secure: true,
-      debug: 2,          // optional, gives console logs
+      debug: 2,               // optional but helpful for console debugging
     });
 
-    peerInstance.on('open', (id) => resolve(peerInstance));
+    peerInstance.on('open', (id) => {
+      console.log('✅ Connected to PeerJS Cloud with ID:', id);
+      resolve(peerInstance);
+    });
 
     peerInstance.on('error', (err) => {
-      console.error('PeerJS error:', err);
+      console.error('❌ PeerJS error:', err);
       alert('Could not establish peer connection. Please try again or refresh the page.');
       reject(err);
     });
   });
 }
+
 
 
 function initializeHost() {
@@ -465,5 +469,6 @@ document.addEventListener('DOMContentLoaded', () => {
   resetState();
   populateDefaultBoard();
 });
+
 
 
