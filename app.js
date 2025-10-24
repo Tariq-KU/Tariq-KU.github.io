@@ -254,10 +254,11 @@ function populateDefaultBoard() {
 function setupPeer() {
   return new Promise((resolve, reject) => {
     const peerInstance = new Peer({
-      host: 'peerjs-server.herokuapp.com',
+      host: '0.peerjs.com',
       port: 443,
       path: '/',
       secure: true,
+      debug: 2,          // optional, gives console logs
     });
 
     peerInstance.on('open', (id) => resolve(peerInstance));
@@ -464,4 +465,5 @@ document.addEventListener('DOMContentLoaded', () => {
   resetState();
   populateDefaultBoard();
 });
+
 
