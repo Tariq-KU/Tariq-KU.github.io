@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guess Who Online</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Guess Who Online</h1>
+    <p class="tagline">Create a room, upload custom characters, and challenge a friend.</p>
+  </header>
+
+  <main class="app-layout">
+    <section class="panel" id="sessionPanel">
+      <h2>Start or join a game</h2>
+      <div class="session-options">
+        <div class="card">
+          <h3>1. Create</h3>
+          <label class="field">
+            <span>Your display name</span>
+            <input type="text" id="hostName" placeholder="Alex" />
+          </label>
+          <button id="createGameBtn" class="primary">Create game</button>
+          <p class="hint">You will get a shareable room code once the game is created.</p>
+        </div>
+        <div class="card">
+          <h3>2. Join</h3>
+          <label class="field">
+            <span>Your display name</span>
+            <input type="text" id="guestName" placeholder="Riley" />
+          </label>
+          <label class="field">
+            <span>Room code</span>
+            <input type="text" id="roomCode" placeholder="Enter code from your friend" />
+          </label>
+          <button id="joinGameBtn" class="secondary">Join game</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel hidden" id="editorPanel">
+      <div class="panel-header">
+        <h2>Build your board</h2>
+        <div class="room-info">
+          <span class="label">Room code:</span>
+          <code id="roomCodeDisplay">-</code>
+        </div>
+      </div>
+      <p class="hint">Upload up to 24 images. Click a name to edit it or remove a card to replace it.</p>
+      <div class="uploader">
+        <label for="cardUpload" class="upload-area">
+          <span class="icon" aria-hidden="true">⬆️</span>
+          <span>Upload character images</span>
+          <small>(PNG or JPEG, max 2MB each)</small>
+        </label>
+        <input type="file" id="cardUpload" accept="image/png,image/jpeg" multiple />
+      </div>
+      <ul class="board-grid editable" id="editorBoard"></ul>
+      <div class="editor-actions">
+        <button id="clearBoardBtn" class="ghost">Clear board</button>
+        <button id="startGameBtn" class="primary" disabled>Share board &amp; start</button>
+      </div>
+    </section>
+
+    <section class="panel hidden" id="gamePanel">
+      <div class="game-top-bar">
+        <div>
+          <h2 id="gameStatus">Waiting for connection...</h2>
+          <p class="room-code">Room code: <code id="activeRoomCode">-</code></p>
+        </div>
+        <div class="players">
+          <div class="player-tag" id="hostTag">Host: <span class="value">-</span></div>
+          <div class="player-tag" id="guestTag">Guest: <span class="value">-</span></div>
+        </div>
+      </div>
+
+      <div class="game-body">
+        <section class="board-section">
+          <h3>Your board</h3>
+          <p class="hint">Click a card to flip it down when you eliminate a character. Click again to flip back up.</p>
+          <ul class="board-grid" id="gameBoard"></ul>
+        </section>
+        <aside class="sidebar">
+          <section class="secret">
+            <h3>Your mystery character</h3>
+            <p id="secretHint">Select one of the cards below to mark it as your character. This is only visible to you.</p>
+          </section>
+          <section class="chat">
+            <h3>Log &amp; chat</h3>
+            <div id="chatLog" aria-live="polite"></div>
+            <form id="chatForm">
+              <label class="sr-only" for="chatInput">Chat message</label>
+              <input type="text" id="chatInput" placeholder="Ask a yes/no question" autocomplete="off" />
+              <button type="submit" class="secondary">Send</button>
+            </form>
+          </section>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <template id="cardTemplate">
+    <li class="card" tabindex="0">
+      <div class="card-inner">
+        <img alt="Character" />
+        <div class="card-label"></div>
+      </div>
+    </li>
+  </template>
+
+  <template id="cardEditorTemplate">
+    <li class="card editing">
+      <div class="card-inner">
+        <img alt="Character" />
+        <input class="card-name-input" type="text" />
+      </div>
+      <button class="remove" type="button" aria-label="Remove card">✕</button>
+    </li>
+  </template>
+
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
