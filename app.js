@@ -190,9 +190,7 @@ function handleCardToggle(cardNode, shouldBroadcast = true) {
 
   cardNode.classList.toggle('down');
 
-  if (shouldBroadcast && connection && connection.open) {
-    connection.send({ type: 'toggle', cardId });
-  }
+  // Card flips should be local-only so each player manages their own board state.
 }
 
 function markSecretCard(cardId) {
@@ -389,13 +387,6 @@ function handleIncomingMessage(payload) {
       boardData = payload.board || [];
       showPanel(gamePanel);
       setupGameBoard(boardData);
-      break;
-    }
-    case 'toggle': {
-      const card = gameBoard.querySelector(`[data-id="${payload.cardId}"]`);
-      if (card) {
-        handleCardToggle(card, false);
-      }
       break;
     }
     case 'chat': {
