@@ -26,6 +26,24 @@ const cardEditorTemplate = document.getElementById('cardEditorTemplate');
 
 const CARD_LIMIT = 24;
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const ICE_SERVERS = [
+  { urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] },
+  {
+    urls: 'turn:openrelay.metered.ca:80',
+    username: 'openrelayproject',
+    credential: 'openrelayproject',
+  },
+  {
+    urls: 'turn:openrelay.metered.ca:443',
+    username: 'openrelayproject',
+    credential: 'openrelayproject',
+  },
+  {
+    urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+    username: 'openrelayproject',
+    credential: 'openrelayproject',
+  },
+];
 
 let peer = null;
 let connection = null;
@@ -251,7 +269,12 @@ function populateDefaultBoard() {
 
 function setupPeer() {
   return new Promise((resolve, reject) => {
-    const peerInstance = new Peer();
+    const peerInstance = new Peer({
+      config: {
+        iceServers: ICE_SERVERS,
+      },
+      debug: 1,
+    });
     peerInstance.on('open', (id) => resolve(peerInstance));
     peerInstance.on('error', (err) => {
       console.error(err);
@@ -343,6 +366,7 @@ function setupConnection() {
   connection.on('error', (err) => {
     console.error(err);
     addLogEntry('Connection error. Try refreshing the page.', new Date().toLocaleTimeString());
+    gameStatus.textContent = 'Connection error. Please refresh and ensure both players have a stable network.';
   });
 }
 

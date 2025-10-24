@@ -27,6 +27,10 @@ A lightweight, peer-to-peer version of the classic Guess Who board game that liv
 
 > **Note:** PeerJS uses a public signalling server by default. For production use you can [self-host a PeerServer](https://github.com/peers/peerjs-server) and configure the connection in `app.js` for additional control.
 
+### Troubleshooting remote connections
+
+If a friend on another network is stuck on “Connecting to host…”, the browsers likely can’t negotiate a direct WebRTC path because one side sits behind a strict NAT or firewall. The app now initializes PeerJS with public STUN/TURN relays from `openrelay.metered.ca`, which lets the peers fall back to a relay when direct traversal fails. Ask both players to refresh after updating to renegotiate with the new servers, and ensure they have a stable internet connection.
+
 ## Deployment
 
 Because the project is static, you can deploy it anywhere that can host HTML files (GitHub Pages, Netlify, Vercel, etc.). Copy the repository contents to your hosting provider and publish—no bundling step required.
